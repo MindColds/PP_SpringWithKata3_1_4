@@ -1,5 +1,6 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,17 +10,19 @@ import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
+
 import java.util.List;
 import java.util.Set;
 
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @RequestMapping("/api")
-public class RestController {
+public class MyRestController {
 
     private final UserService userService;
     private final RoleService roleService;
 
-    public RestController(UserService userService, RoleService roleService) {
+    @Autowired
+    public MyRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -32,7 +35,7 @@ public class RestController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> showUser(@PathVariable Integer id) {
+    public ResponseEntity<User> showUserById(@PathVariable Integer id) {
         User user = userService.findById(id);
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
@@ -57,7 +60,7 @@ public class RestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/viewUser")
+    @GetMapping("/showUser")
     public ResponseEntity<User> showUser(Authentication auth) {
         return new ResponseEntity<>((User) auth.getPrincipal(), HttpStatus.OK);
     }
